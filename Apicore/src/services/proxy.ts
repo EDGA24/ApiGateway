@@ -18,19 +18,5 @@ export const userServiceProxy = createProxyMiddleware({
   }
 });
 
-// Otros microserviios que agregues en el futuro
-export const orderServiceProxy = createProxyMiddleware({
-  target: 'http://localhost:3002',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/api/orders': '/api'
-  }
-});
 
-export const productServiceProxy = createProxyMiddleware({
-  target: 'http://localhost:3003', 
-  changeOrigin: true,
-  pathRewrite: {
-    '^/api/products': '/api'
-  }
-});
+

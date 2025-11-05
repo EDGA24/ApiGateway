@@ -4,8 +4,6 @@ import { authenticateToken } from '../middleware/auth';
 import { authLimiter, createLimiter, generalLimiter } from '../middleware/rateLimit';
 
 const router = Router();
-
-// Health check del API Gateway
 router.get('/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -15,19 +13,17 @@ router.get('/health', (req, res) => {
   });
 });
 
-// Aplicar rate limiting específico a rutas de usuarios
-router.use('/users/register', createLimiter);
-router.use('/users/login', authLimiter);
+
+router.use('/auth/register', createLimiter);
+router.use('/auth/login', authLimiter);
+router.use('/users/create', createLimiter);
+// Proxy hacia el servicio de autenticación (login/register)
+
+//router.use('/auth', authServiceProxy);
 
 // Proxy hacia el microservicio de usuarios
 router.use('/users', userServiceProxy);
 
-// Ruta protegida de ejemplo
-router.get('/profile', authenticateToken, (req, res) => {
-  res.json({
-    message: 'This is a protected route',
-    user: req.user
-  });
-});
+
 
 export default router;

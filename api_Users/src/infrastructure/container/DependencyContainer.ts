@@ -6,15 +6,16 @@ import { BcryptHashService } from '../../infrastructure/services/BcryptHashServi
 import { JwtTokenService } from '../../infrastructure/services/JwtTokenService';
 
 // Use Cases
-import { RegisterUserUseCase } from '../../application/use-cases/RegisterUserUseCase';
-import { LoginUserUseCase } from '../../application/use-cases/LoginUserUseCase';
+import { CreateUserUseCase } from '../../application/use-cases/CreateUserUseCase';
+import { GetUserByIdUseCase } from '../../application/use-cases/GetUserByIdUseCase';
+import { UpdateUserByIdUseCase } from '../../application/use-cases/UpdateUserByIdUseCase';
+import { DeleteUserByIdUseCase } from '../../application/use-cases/DeleteUserByIdUseCase'; 
 
 // Controllers
 import { UserController } from '../../presentation/controllers/UserController';
 
 // Routes
 import { UserRoutes } from '../../presentation/routes/UserRoutes';
-
 export class DependencyContainer {
   
   static createUserRoutes(): UserRoutes {
@@ -26,11 +27,31 @@ export class DependencyContainer {
     const tokenService = new JwtTokenService();
     
     // Use Cases
-    const registerUseCase = new RegisterUserUseCase(userRepository, hashService);
-    const loginUseCase = new LoginUserUseCase(userRepository, hashService, tokenService);
+    const createUserUseCase = new CreateUserUseCase(
+      userRepository,
+      hashService
+    );
+
+    const getUserByIdUseCase = new GetUserByIdUseCase(
+      userRepository 
+    );
+
+     const updateUserByIdUseCase = new UpdateUserByIdUseCase(
+      userRepository,
+      hashService
+    );
+
+    const deleteUserByIdUseCase = new DeleteUserByIdUseCase(
+      userRepository
+    );
     
-    // Controller
-    const userController = new UserController(registerUseCase, loginUseCase);
+   
+    const userController = new UserController(
+      createUserUseCase,
+      getUserByIdUseCase,
+      updateUserByIdUseCase,
+      deleteUserByIdUseCase 
+    );
     
     // Routes
     return new UserRoutes(userController);

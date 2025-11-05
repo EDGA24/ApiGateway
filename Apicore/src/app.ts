@@ -4,8 +4,8 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-dotenv.config();
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 const userProxy = createProxyMiddleware({
   target: 'http://localhost:3001',
   changeOrigin: true,
-  timeout: 60000, // 60 segundos
+  timeout: 60000, 
   proxyTimeout: 60000,
   pathRewrite: {
     '^/api/users': '/api'
@@ -56,6 +56,7 @@ const userProxy = createProxyMiddleware({
       proxyReq.write(bodyData);
     }
   },
+
   onProxyRes: (proxyRes, req, res) => {
     console.log(`Response: ${proxyRes.statusCode}`);
   }
