@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3002;
 app.use(cors());
 app.use(express.json());
 
-app.get('/health', (req, res) => {
+app.get('/auth/health', (req, res) => {
   res.json({ status: 'OK', service: 'Authentication Service' });
 });
 
