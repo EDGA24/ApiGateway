@@ -14,8 +14,7 @@ export class MongoUserRepository implements UserRepository {
       profile_image: user.profile_image,
       historyTimeUse_ids: user.historyTimeUse_ids
     });
-
-    const savedDocument = await userDocument.save();
+    const savedDocument = await userDocument.save();  
     return this.toDomainEntity(savedDocument);
   }
 

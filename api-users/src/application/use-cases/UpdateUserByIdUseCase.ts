@@ -1,6 +1,5 @@
 import { User } from '../../domain/entities/User';
 import { UserRepository } from '../../domain/repositories/UserRepository';
-import { HashService } from '../services/HashService';
 
 export interface UpdateUserByIdRequest {
   id: string;

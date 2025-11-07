@@ -13,40 +13,67 @@ import { UserController } from '../../presentation/controllers/UserController';
 
 // Routes
 import { UserRoutes } from '../../presentation/routes/UserRoutes';
+import { DatabaseConnection } from '../database/DatabaseConnection';
 export class DependencyContainer {
-  
-  static createUserRoutes(): UserRoutes {
+  private userRepository: MongoUserRepository;
+
+  private createUserUseCase: CreateUserUseCase
+  private getUserByIdUseCase: GetUserByIdUseCase
+  private getUserByEmailUseCase: GetUserByEmailUseCase
+  private updateUserByIdUseCase: UpdateUserByIdUseCase
+  private deleteUserByIdUseCase: DeleteUserByIdUseCase
+
+
+  constructor(
+    mongoRootUser: string,
+    mongoRootPassword: string
+  ) {
     // Repositories
-    const userRepository = new MongoUserRepository();
+    this.initDatabaseConnection(
+      mongoRootUser, 
+      mongoRootPassword
+    );
+
+    this.userRepository = new MongoUserRepository();
     
     // Use Cases
-    const createUserUseCase = new CreateUserUseCase(
-      userRepository
+    this.createUserUseCase = new CreateUserUseCase(
+      this.userRepository
     );
 
-    const getUserByIdUseCase = new GetUserByIdUseCase(
-      userRepository
+    this.getUserByIdUseCase = new GetUserByIdUseCase(
+      this.userRepository
     );
 
-    const getUserByEmailUseCase = new GetUserByEmailUseCase(
-      userRepository
+    this.getUserByEmailUseCase = new GetUserByEmailUseCase(
+      this.userRepository
     );
 
-    const updateUserByIdUseCase = new UpdateUserByIdUseCase(
-      userRepository
+    this.updateUserByIdUseCase = new UpdateUserByIdUseCase(
+      this.userRepository
     );
 
-    const deleteUserByIdUseCase = new DeleteUserByIdUseCase(
-      userRepository
+    this.deleteUserByIdUseCase = new DeleteUserByIdUseCase(
+      this.userRepository
     );
+
+  }
+  private async initDatabaseConnection(
+    mongoRootUser: string,
+    mongoRootPassword: string
+  ): Promise<void> {
+    await DatabaseConnection.connect(mongoRootUser, mongoRootPassword); 
+  }
+  
+  createUserRoutes(): UserRoutes {
 
     // Controller con todos los casos de uso
     const userController = new UserController(
-      createUserUseCase,
-      getUserByIdUseCase,
-      getUserByEmailUseCase,
-      updateUserByIdUseCase,
-      deleteUserByIdUseCase
+      this.createUserUseCase,
+      this.getUserByIdUseCase,
+      this.getUserByEmailUseCase,
+      this.updateUserByIdUseCase,
+      this.deleteUserByIdUseCase
     );
     
     // Routes

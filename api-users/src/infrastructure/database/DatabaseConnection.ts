@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
 export class DatabaseConnection {
-  
-  static async connect(): Promise<void> {
+
+  static async connect(mongoRootUser: string, mongoRootPassword: string): Promise<void> {
     try {
-      const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/users_simple';
+      const mongoUri = `mongodb://${mongoRootUser}:${mongoRootPassword}@localhost:27017/?authSource=admin`;
       await mongoose.connect(mongoUri);
       console.log('✅ MongoDB conectado');
     } catch (error) {

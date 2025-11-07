@@ -1,6 +1,5 @@
 import { User } from '../../domain/entities/User';
 import { UserRepository } from '../../domain/repositories/UserRepository';
-import { HashService } from '../services/HashService';
 
 
 
@@ -24,6 +23,7 @@ export class CreateUserUseCase {
     if (existingUser) {
       throw new Error('El usuario ya existe');
     }
+      console.log(request);
 
     // Validar nivel de experiencia si se proporciona
     if (request.experience_level && (request.experience_level < 1 || request.experience_level > 4)) {
@@ -48,7 +48,6 @@ export class CreateUserUseCase {
 
    
 
-  
     const user = new User({
       name: request.name.trim(),
       email: request.email.toLowerCase(),

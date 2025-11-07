@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { DatabaseConnection } from '../database/DatabaseConnection';
 import { DependencyContainer } from '../container/DependencyContainer';
 
 dotenv.config();
@@ -9,10 +8,17 @@ dotenv.config();
 export class App {
   private app: express.Application;
   private port: number;
+  private dependencyContainer: DependencyContainer;
 
   constructor() {
     this.app = express();
     this.port = parseInt(process.env.PORT || '3001', 10);
+    const mongoRootUser = process.env.MONGO_ROOT_USER || 'admin';
+    const mongoRootPassword = process.env.MONGO_ROOT_PASSWORD || 'password123';
+    this.dependencyContainer = new DependencyContainer(
+      mongoRootUser,
+      mongoRootPassword
+    );
     
     this.initializeMiddlewares();
     this.initializeRoutes();
@@ -30,14 +36,13 @@ export class App {
     });
 
     // User routes
-    const userRoutes = DependencyContainer.createUserRoutes();
+    const userRoutes = this.dependencyContainer.createUserRoutes();
     this.app.use('/api', userRoutes.getRouter());
   }
 
   async start(): Promise<void> {
     try {
       // Conectar a la base de datos
-      await DatabaseConnection.connect();
       
       // Iniciar servidor
       this.app.listen(this.port, () => {
