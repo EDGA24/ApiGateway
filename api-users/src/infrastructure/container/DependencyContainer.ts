@@ -1,10 +1,6 @@
 // Repositories
 import { MongoUserRepository } from '../../infrastructure/repositories/MongoUserRepository';
 
-// Services
-import { BcryptHashService } from '../../infrastructure/services/BcryptHashService';
-import { JwtTokenService } from '../../infrastructure/services/JwtTokenService';
-
 // Use Cases
 import { CreateUserUseCase } from '../../application/use-cases/CreateUserUseCase';
 import { GetUserByIdUseCase } from '../../application/use-cases/GetUserByIdUseCase';
@@ -23,14 +19,9 @@ export class DependencyContainer {
     // Repositories
     const userRepository = new MongoUserRepository();
     
-    // Services
-    const hashService = new BcryptHashService();
-    const tokenService = new JwtTokenService();
-    
     // Use Cases
     const createUserUseCase = new CreateUserUseCase(
-      userRepository,
-      hashService
+      userRepository
     );
 
     const getUserByIdUseCase = new GetUserByIdUseCase(
@@ -42,8 +33,7 @@ export class DependencyContainer {
     );
 
     const updateUserByIdUseCase = new UpdateUserByIdUseCase(
-      userRepository,
-      hashService
+      userRepository
     );
 
     const deleteUserByIdUseCase = new DeleteUserByIdUseCase(

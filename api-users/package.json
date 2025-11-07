@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/main.js",
   "scripts": {
-    "dev": "npx ts-node src/main.ts",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts",
     "dev:watch": "npx nodemon --exec \"npx ts-node src/main.ts\"",
     "build": "tsc",
     "start": "node dist/main.js"

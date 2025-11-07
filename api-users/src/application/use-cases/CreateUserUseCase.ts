@@ -15,8 +15,7 @@ export interface CreateUserRequest {
 
 export class CreateUserUseCase {
   constructor(
-    private userRepository: UserRepository,
-    private hashService: HashService
+    private userRepository: UserRepository
   ) {}
 
   async execute(request: CreateUserRequest): Promise<User> {
@@ -48,13 +47,12 @@ export class CreateUserUseCase {
     }
 
    
-    const hashedPassword = await this.hashService.hash(request.password);
 
   
     const user = new User({
       name: request.name.trim(),
       email: request.email.toLowerCase(),
-      password: hashedPassword,
+      password: request.password,
       experience_level: request.experience_level || 1,
       profile_image: request.profile_image,
       historyTimeUse_ids: request.historyTimeUse_ids || []

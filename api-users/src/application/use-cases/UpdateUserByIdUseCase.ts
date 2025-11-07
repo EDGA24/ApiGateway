@@ -13,8 +13,7 @@ export interface UpdateUserByIdRequest {
 
 export class UpdateUserByIdUseCase {
   constructor(
-    private userRepository: UserRepository,
-    private hashService: HashService
+    private userRepository: UserRepository
   ) {}
 
   async execute(request: UpdateUserByIdRequest): Promise<User> {
@@ -60,18 +59,12 @@ export class UpdateUserByIdUseCase {
       }
     }
 
-    // Preparar datos para actualización
-    let hashedPassword = existingUser.password;
-    if (request.password) {
-      hashedPassword = await this.hashService.hash(request.password);
-    }
-
     // Crear usuario actualizado
     const updatedUser = new User({
       id: existingUser.id,
       name: request.name !== undefined ? request.name.trim() : existingUser.name,
       email: request.email !== undefined ? request.email.toLowerCase() : existingUser.email,
-      password: hashedPassword,
+      password: existingUser.password,
       experience_level: request.experience_level !== undefined ? request.experience_level : existingUser.experience_level,
       profile_image: request.profile_image !== undefined ? request.profile_image : existingUser.profile_image,
       createdAt: existingUser.createdAt,
